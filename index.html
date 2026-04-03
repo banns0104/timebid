@@ -743,12 +743,20 @@ body {
 
 .home-layout {
   display: block;
+  padding: 20px 16px;
+}
+
+@media (min-width: 768px) {
+  .home-layout {
+    padding: 28px 32px;
+  }
 }
 
 @media (min-width: 1100px) {
   .home-layout {
     display: flex;
     gap: 24px;
+    padding: 28px 32px;
   }
 }
 
@@ -4757,7 +4765,7 @@ function showPage(name,skipPush){
   if(si)si.classList.add('active');
   window.scrollTo(0,0);
   if(!skipPush&&!_navSkipPush){
-    history.pushState({page:name},'','#'+name);
+    try{history.pushState({page:name},'','#'+name);}catch(e){}
   }
   ({home:renderHome,explore:renderExplore,mypage:renderMypage,
     chat:renderChatList,notifications:renderNotifs,
@@ -5985,17 +5993,19 @@ document.addEventListener('click',e=>{
 });
 
 // ── HISTORY ──────────────────────────────────────────────
-window.addEventListener('popstate',function(e){
-  const pg=(e.state&&e.state.page)||location.hash.replace('#','')||'home';
-  _navSkipPush=true;
-  showPage(pg,true);
-  _navSkipPush=false;
-});
+try{
+  window.addEventListener('popstate',function(e){
+    const pg=(e.state&&e.state.page)||location.hash.replace('#','')||'home';
+    _navSkipPush=true;
+    showPage(pg,true);
+    _navSkipPush=false;
+  });
+}catch(e){}
 
 // ── INIT ─────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded',()=>{
   const initPage=location.hash.replace('#','')||'home';
-  history.replaceState({page:initPage},'','#'+initPage);
+  try{history.replaceState({page:initPage},'','#'+initPage);}catch(e){}
   showPage(initPage,true);
   startSims();
   updateBadges();

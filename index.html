@@ -159,6 +159,15 @@ body {
   padding: 20px 16px;
 }
 
+@media (min-width: 768px) {
+  .page-inner {
+    padding: 28px 32px;
+  }
+  .page-inner-sm {
+    padding: 28px 32px;
+  }
+}
+
 /* SIDEBAR */
 
 .sidebar-logo {
@@ -3803,30 +3812,498 @@ body {
 <div class="page" id="page-seller-dashboard">
   <div class="page-inner">
     <h2 class="page-title">셀러 대시보드</h2>
-    <div class="dashboard-stats">
-      <div class="dash-stat-card"><div class="dsc-label">이번 달 수익</div><div class="dsc-value">214,000원</div><div class="dsc-change up">+23%</div></div>
-      <div class="dash-stat-card"><div class="dsc-label">진행 경매</div><div class="dsc-value">2건</div><div class="dsc-change">활성</div></div>
-      <div class="dash-stat-card"><div class="dsc-label">평균 낙찰가</div><div class="dsc-value">107,000원</div><div class="dsc-change up">+8%</div></div>
-      <div class="dash-stat-card"><div class="dsc-label">재구매율</div><div class="dsc-value">73%</div><div class="dsc-change up">업계 평균 초과</div></div>
+
+    <!-- TAB NAVIGATION -->
+    <div style="display:flex;gap:0;border-bottom:1px solid #eee;margin-bottom:24px;overflow-x:auto">
+      <button class="dash-tab active" onclick="switchDashTab('overview')" style="padding:12px 16px;border:none;background:none;cursor:pointer;font-size:14px;font-weight:500;color:#333;border-bottom:2px solid #D62B45;white-space:nowrap">개요</button>
+      <button class="dash-tab" onclick="switchDashTab('auctions')" style="padding:12px 16px;border:none;background:none;cursor:pointer;font-size:14px;font-weight:500;color:#999;border-bottom:2px solid transparent;white-space:nowrap">경매관리</button>
+      <button class="dash-tab" onclick="switchDashTab('settlement')" style="padding:12px 16px;border:none;background:none;cursor:pointer;font-size:14px;font-weight:500;color:#999;border-bottom:2px solid transparent;white-space:nowrap">정산</button>
+      <button class="dash-tab" onclick="switchDashTab('reviews')" style="padding:12px 16px;border:none;background:none;cursor:pointer;font-size:14px;font-weight:500;color:#999;border-bottom:2px solid transparent;white-space:nowrap">리뷰관리</button>
+      <button class="dash-tab" onclick="switchDashTab('settings')" style="padding:12px 16px;border:none;background:none;cursor:pointer;font-size:14px;font-weight:500;color:#999;border-bottom:2px solid transparent;white-space:nowrap">설정</button>
     </div>
-    <div class="new-auction-cta" onclick="showPage('seller-register')">
-      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#D62B45" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
-      <span>새 경매 등록하기</span>
+
+    <!-- TAB 1: OVERVIEW -->
+    <div id="dash-tab-overview" class="dash-tab-content" style="display:block">
+      <!-- KPI Cards -->
+      <div class="dashboard-stats" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;margin-bottom:24px">
+        <div class="dash-stat-card" style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:16px;text-align:center">
+          <div class="dsc-label" style="font-size:12px;color:#999;margin-bottom:8px">이번 달 수익</div>
+          <div class="dsc-value" style="font-size:24px;font-weight:700;color:#333;margin-bottom:4px">214,000<span style="font-size:14px">원</span></div>
+          <div class="dsc-change up" style="font-size:12px;color:#D62B45">+23%</div>
+        </div>
+        <div class="dash-stat-card" style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:16px;text-align:center">
+          <div class="dsc-label" style="font-size:12px;color:#999;margin-bottom:8px">진행 경매</div>
+          <div class="dsc-value" style="font-size:24px;font-weight:700;color:#333;margin-bottom:4px">2<span style="font-size:14px">건</span></div>
+          <div class="dsc-change" style="font-size:12px;color:#28a745">활성</div>
+        </div>
+        <div class="dash-stat-card" style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:16px;text-align:center">
+          <div class="dsc-label" style="font-size:12px;color:#999;margin-bottom:8px">평균 낙찰가</div>
+          <div class="dsc-value" style="font-size:24px;font-weight:700;color:#333;margin-bottom:4px">107,000<span style="font-size:14px">원</span></div>
+          <div class="dsc-change up" style="font-size:12px;color:#D62B45">+8%</div>
+        </div>
+        <div class="dash-stat-card" style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:16px;text-align:center">
+          <div class="dsc-label" style="font-size:12px;color:#999;margin-bottom:8px">재구매율</div>
+          <div class="dsc-value" style="font-size:24px;font-weight:700;color:#333;margin-bottom:4px">73<span style="font-size:14px">%</span></div>
+          <div class="dsc-change up" style="font-size:12px;color:#D62B45">업계 평균 초과</div>
+        </div>
+      </div>
+
+      <!-- Sales Trend Chart (7-day bar chart) -->
+      <div class="section-block" style="margin-bottom:24px">
+        <div class="section-title" style="margin-bottom:16px">매출 트렌드 (최근 7일)</div>
+        <svg width="100%" height="180" viewBox="0 0 400 180" style="background:#fafafa;border-radius:8px">
+          <text x="10" y="20" font-size="11" fill="#999">100K</text>
+          <text x="10" y="55" font-size="11" fill="#999">75K</text>
+          <text x="10" y="90" font-size="11" fill="#999">50K</text>
+          <text x="10" y="125" font-size="11" fill="#999">25K</text>
+          <text x="10" y="160" font-size="11" fill="#999">0</text>
+          <line x1="30" y1="30" x2="390" y2="30" stroke="#e0e0e0" stroke-width="0.5"/>
+          <line x1="30" y1="65" x2="390" y2="65" stroke="#e0e0e0" stroke-width="0.5"/>
+          <line x1="30" y1="100" x2="390" y2="100" stroke="#e0e0e0" stroke-width="0.5"/>
+          <line x1="30" y1="135" x2="390" y2="135" stroke="#e0e0e0" stroke-width="0.5"/>
+          <rect x="40" y="93" width="20" height="59" fill="#D62B45" opacity="0.7" rx="3"/>
+          <text x="40" y="160" font-size="11" fill="#666" text-anchor="middle">월</text>
+          <rect x="68" y="68" width="20" height="84" fill="#D62B45" rx="3"/>
+          <text x="68" y="160" font-size="11" fill="#666" text-anchor="middle">화</text>
+          <rect x="96" y="105" width="20" height="47" fill="#D62B45" opacity="0.7" rx="3"/>
+          <text x="96" y="160" font-size="11" fill="#666" text-anchor="middle">수</text>
+          <rect x="124" y="58" width="20" height="94" fill="#D62B45" rx="3"/>
+          <text x="124" y="160" font-size="11" fill="#666" text-anchor="middle">목</text>
+          <rect x="152" y="33" width="20" height="119" fill="#D62B45" rx="3"/>
+          <text x="152" y="160" font-size="11" fill="#666" text-anchor="middle">금</text>
+          <rect x="180" y="84" width="20" height="68" fill="#D62B45" opacity="0.7" rx="3"/>
+          <text x="180" y="160" font-size="11" fill="#666" text-anchor="middle">토</text>
+          <rect x="208" y="56" width="20" height="96" fill="#D62B45" rx="3"/>
+          <text x="208" y="160" font-size="11" fill="#666" text-anchor="middle">일</text>
+        </svg>
+      </div>
+
+      <!-- Active Auctions -->
+      <div class="section-block" style="margin-bottom:24px">
+        <div class="section-title" style="margin-bottom:12px">활성 경매 현황</div>
+        <div style="background:#fff8f8;border:1px solid #ffe0e0;border-radius:8px;padding:12px">
+          <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px">
+            <div style="width:3px;height:40px;background:#D62B45;border-radius:2px"></div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:#333">커피 데이트</div>
+              <div style="font-size:12px;color:#999">현재가: 155,000원 · 입찰자 3명 · 남은시간: 2시간 15분</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px">
+            <div style="width:3px;height:40px;background:#D62B45;border-radius:2px"></div>
+            <div>
+              <div style="font-size:14px;font-weight:600;color:#333">메이크업 컨설팅</div>
+              <div style="font-size:12px;color:#999">현재가: 89,000원 · 입찰자 5명 · 남은시간: 18시간 42분</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Upcoming Experience Schedule -->
+      <div class="section-block" style="margin-bottom:24px">
+        <div class="section-title" style="margin-bottom:12px">예정된 경험 일정 (3건)</div>
+        <div style="display:grid;gap:12px">
+          <div style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#333">스타일 상담</div>
+              <div style="font-size:12px;color:#999">낙찰자: 최** · 4월 5일 (토) 오후 2시</div>
+            </div>
+            <div style="background:#e8f5e9;color:#28a745;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">예정중</div>
+          </div>
+          <div style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#333">영어 첨삭 컨설팅</div>
+              <div style="font-size:12px;color:#999">낙찰자: 김** · 4월 7일 (월) 오전 10시</div>
+            </div>
+            <div style="background:#e8f5e9;color:#28a745;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">예정중</div>
+          </div>
+          <div style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:12px;display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#333">카리스마 발성 레슨</div>
+              <div style="font-size:12px;color:#999">낙찰자: 박** · 4월 9일 (수) 오후 7시</div>
+            </div>
+            <div style="background:#e8f5e9;color:#28a745;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">예정중</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Action Buttons -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+        <button class="new-auction-cta" onclick="showPage('seller-register')" style="background:#D62B45;color:white;border:none;border-radius:8px;padding:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          새 경매 등록
+        </button>
+        <button style="background:#f5f5f5;color:#333;border:none;border-radius:8px;padding:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600" onclick="switchDashTab('settlement')">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D62B45" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          정산 현황
+        </button>
+      </div>
     </div>
-    <div class="section-block" style="margin-top:16px">
-      <div class="section-title">최근 거래 내역</div>
-      <table class="dash-table"><thead><tr><th>날짜</th><th>경매</th><th>낙찰자</th><th>금액</th><th>상태</th></tr></thead>
-      <tbody>
-        <tr><td>03.28</td><td>커피 데이트</td><td>박**</td><td>155,000원</td><td><span class="status-done">완료</span></td></tr>
-        <tr><td>03.21</td><td>메이크업 컨설팅</td><td>이**</td><td>89,000원</td><td><span class="status-done">완료</span></td></tr>
-        <tr><td>03.15</td><td>스타일 상담</td><td>최**</td><td>89,000원</td><td><span class="status-pending">정산 대기</span></td></tr>
-      </tbody></table>
+
+    <!-- TAB 2: AUCTION MANAGEMENT -->
+    <div id="dash-tab-auctions" class="dash-tab-content" style="display:none">
+      <div style="margin-bottom:24px">
+        <div class="section-title" style="margin-bottom:12px">진행중인 경매</div>
+        <div style="display:grid;gap:12px">
+          <div style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:16px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+              <div>
+                <div style="font-size:14px;font-weight:600;color:#333">커피 데이트</div>
+                <div style="font-size:12px;color:#999;margin-top:4px">현재가 155,000원 · 입찰자 3명</div>
+              </div>
+              <div style="background:#fff3cd;color:#856404;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">진행중</div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <button style="flex:1;background:#D62B45;color:white;border:none;border-radius:6px;padding:8px;font-size:12px;font-weight:600;cursor:pointer">수정</button>
+              <button style="flex:1;background:#f5f5f5;color:#333;border:none;border-radius:6px;padding:8px;font-size:12px;font-weight:600;cursor:pointer" onclick="showToast('경매를 종료하시겠습니까?')">종료</button>
+            </div>
+          </div>
+          <div style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:16px">
+            <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+              <div>
+                <div style="font-size:14px;font-weight:600;color:#333">메이크업 컨설팅</div>
+                <div style="font-size:12px;color:#999;margin-top:4px">현재가 89,000원 · 입찰자 5명</div>
+              </div>
+              <div style="background:#fff3cd;color:#856404;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">진행중</div>
+            </div>
+            <div style="display:flex;gap:8px;margin-top:12px">
+              <button style="flex:1;background:#D62B45;color:white;border:none;border-radius:6px;padding:8px;font-size:12px;font-weight:600;cursor:pointer">수정</button>
+              <button style="flex:1;background:#f5f5f5;color:#333;border:none;border-radius:6px;padding:8px;font-size:12px;font-weight:600;cursor:pointer" onclick="showToast('경매를 종료하시겠습니까?')">종료</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-bottom:24px">
+        <div class="section-title" style="margin-bottom:12px">대기중 요청</div>
+        <div style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:16px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:#333">즉시구매 요청</div>
+              <div style="font-size:12px;color:#999;margin-top:4px">카리스마 발성 레슨 · 제시가: 150,000원</div>
+            </div>
+            <div style="background:#e8f5e9;color:#28a745;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">대기중</div>
+          </div>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button style="flex:1;background:#28a745;color:white;border:none;border-radius:6px;padding:8px;font-size:12px;font-weight:600;cursor:pointer">수락</button>
+            <button style="flex:1;background:#f5f5f5;color:#333;border:none;border-radius:6px;padding:8px;font-size:12px;font-weight:600;cursor:pointer">거절</button>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-title" style="margin-bottom:12px">완료된 경매</div>
+        <table class="dash-table" style="width:100%;border-collapse:collapse">
+          <thead style="background:#f9f9f9">
+            <tr>
+              <th style="padding:12px;text-align:left;font-size:12px;font-weight:600;color:#666;border-bottom:1px solid #e0e0e0">날짜</th>
+              <th style="padding:12px;text-align:left;font-size:12px;font-weight:600;color:#666;border-bottom:1px solid #e0e0e0">경매명</th>
+              <th style="padding:12px;text-align:left;font-size:12px;font-weight:600;color:#666;border-bottom:1px solid #e0e0e0">낙찰자</th>
+              <th style="padding:12px;text-align:left;font-size:12px;font-weight:600;color:#666;border-bottom:1px solid #e0e0e0">금액</th>
+              <th style="padding:12px;text-align:left;font-size:12px;font-weight:600;color:#666;border-bottom:1px solid #e0e0e0">상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #f0f0f0">
+              <td style="padding:12px;font-size:12px;color:#333">03.28</td>
+              <td style="padding:12px;font-size:12px;color:#333">커피 데이트</td>
+              <td style="padding:12px;font-size:12px;color:#333">박**</td>
+              <td style="padding:12px;font-size:12px;color:#333;font-weight:600">155,000원</td>
+              <td style="padding:12px"><span class="status-done" style="background:#e8f5e9;color:#28a745;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">완료</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid #f0f0f0">
+              <td style="padding:12px;font-size:12px;color:#333">03.21</td>
+              <td style="padding:12px;font-size:12px;color:#333">메이크업 컨설팅</td>
+              <td style="padding:12px;font-size:12px;color:#333">이**</td>
+              <td style="padding:12px;font-size:12px;color:#333;font-weight:600">89,000원</td>
+              <td style="padding:12px"><span class="status-done" style="background:#e8f5e9;color:#28a745;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">완료</span></td>
+            </tr>
+            <tr>
+              <td style="padding:12px;font-size:12px;color:#333">03.15</td>
+              <td style="padding:12px;font-size:12px;color:#333">스타일 상담</td>
+              <td style="padding:12px;font-size:12px;color:#333">최**</td>
+              <td style="padding:12px;font-size:12px;color:#333;font-weight:600">89,000원</td>
+              <td style="padding:12px"><span class="status-pending" style="background:#fff3cd;color:#856404;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">정산 대기</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
-    <div class="settlement-card">
-      <div style="font-size:13px;color:#666">다음 정산 예정일</div>
-      <div style="font-size:20px;font-weight:700;margin:4px 0">197,680원</div>
-      <div style="font-size:12px;color:#999">2024.04.10 · 등록 계좌로 입금</div>
+
+    <!-- TAB 3: SETTLEMENT -->
+    <div id="dash-tab-settlement" class="dash-tab-content" style="display:none">
+      <div class="settlement-card" style="background:linear-gradient(135deg,#D62B45,#e63a54);color:white;border-radius:12px;padding:24px;margin-bottom:24px">
+        <div style="font-size:13px;opacity:0.9">다음 정산 예정일</div>
+        <div style="font-size:32px;font-weight:700;margin:12px 0">197,680<span style="font-size:18px">원</span></div>
+        <div style="font-size:12px;opacity:0.8">2026.04.10 · 등록 계좌로 입금</div>
+      </div>
+
+      <div class="section-block" style="margin-bottom:24px">
+        <div class="section-title" style="margin-bottom:16px">월별 수익 내역</div>
+        <table class="dash-table" style="width:100%;border-collapse:collapse">
+          <thead style="background:#f9f9f9">
+            <tr>
+              <th style="padding:12px;text-align:left;font-size:12px;font-weight:600;color:#666;border-bottom:1px solid #e0e0e0">월</th>
+              <th style="padding:12px;text-align:left;font-size:12px;font-weight:600;color:#666;border-bottom:1px solid #e0e0e0">총 경매</th>
+              <th style="padding:12px;text-align:left;font-size:12px;font-weight:600;color:#666;border-bottom:1px solid #e0e0e0">총 수익</th>
+              <th style="padding:12px;text-align:left;font-size:12px;font-weight:600;color:#666;border-bottom:1px solid #e0e0e0">정산액</th>
+              <th style="padding:12px;text-align:left;font-size:12px;font-weight:600;color:#666;border-bottom:1px solid #e0e0e0">상태</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="border-bottom:1px solid #f0f0f0">
+              <td style="padding:12px;font-size:12px;color:#333">2026.03</td>
+              <td style="padding:12px;font-size:12px;color:#333">5건</td>
+              <td style="padding:12px;font-size:12px;color:#333;font-weight:600">742,000원</td>
+              <td style="padding:12px;font-size:12px;color:#333;font-weight:600">715,530원</td>
+              <td style="padding:12px"><span style="background:#e8f5e9;color:#28a745;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">완료</span></td>
+            </tr>
+            <tr style="border-bottom:1px solid #f0f0f0">
+              <td style="padding:12px;font-size:12px;color:#333">2026.02</td>
+              <td style="padding:12px;font-size:12px;color:#333">4건</td>
+              <td style="padding:12px;font-size:12px;color:#333;font-weight:600">521,000원</td>
+              <td style="padding:12px;font-size:12px;color:#333;font-weight:600">502,562원</td>
+              <td style="padding:12px"><span style="background:#e8f5e9;color:#28a745;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">완료</span></td>
+            </tr>
+            <tr>
+              <td style="padding:12px;font-size:12px;color:#333">2026.01</td>
+              <td style="padding:12px;font-size:12px;color:#333">3건</td>
+              <td style="padding:12px;font-size:12px;color:#333;font-weight:600">387,500원</td>
+              <td style="padding:12px;font-size:12px;color:#333;font-weight:600">373,812원</td>
+              <td style="padding:12px"><span style="background:#e8f5e9;color:#28a745;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600">완료</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="section-block" style="margin-bottom:24px">
+        <div class="section-title" style="margin-bottom:16px">누적 수익 추이</div>
+        <svg width="100%" height="200" viewBox="0 0 400 200" style="background:#fafafa;border-radius:8px">
+          <text x="5" y="20" font-size="11" fill="#999">2M</text>
+          <text x="5" y="75" font-size="11" fill="#999">1.5M</text>
+          <text x="5" y="130" font-size="11" fill="#999">1M</text>
+          <text x="5" y="185" font-size="11" fill="#999">0</text>
+          <line x1="25" y1="25" x2="390" y2="25" stroke="#e0e0e0" stroke-width="0.5"/>
+          <line x1="25" y1="80" x2="390" y2="80" stroke="#e0e0e0" stroke-width="0.5"/>
+          <line x1="25" y1="135" x2="390" y2="135" stroke="#e0e0e0" stroke-width="0.5"/>
+          <polyline points="60,142 180,80 300,28" fill="none" stroke="#D62B45" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="60" cy="142" r="4" fill="#D62B45"/>
+          <circle cx="180" cy="80" r="4" fill="#D62B45"/>
+          <circle cx="300" cy="28" r="4" fill="#D62B45"/>
+          <text x="60" y="195" font-size="11" fill="#666" text-anchor="middle">1월</text>
+          <text x="180" y="195" font-size="11" fill="#666" text-anchor="middle">2월</text>
+          <text x="300" y="195" font-size="11" fill="#666" text-anchor="middle">3월</text>
+        </svg>
+      </div>
+
+      <div class="section-block">
+        <div class="section-title" style="margin-bottom:12px">정산 계좌 정보</div>
+        <div style="background:#f5f5f5;border-radius:8px;padding:16px">
+          <div style="display:flex;justify-content:space-between;margin-bottom:12px">
+            <div>
+              <div style="font-size:12px;color:#999;margin-bottom:4px">은행</div>
+              <div style="font-size:14px;font-weight:600;color:#333">국민은행</div>
+            </div>
+            <button style="background:#D62B45;color:white;border:none;border-radius:6px;padding:8px 12px;font-size:12px;font-weight:600;cursor:pointer">변경</button>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-size:12px;color:#999;margin-bottom:4px">계좌번호</div>
+              <div style="font-size:14px;font-weight:600;color:#333">123-456-789012 (김셀러)</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- TAB 4: REVIEW MANAGEMENT -->
+    <div id="dash-tab-reviews" class="dash-tab-content" style="display:none">
+      <div class="section-block" style="margin-bottom:24px">
+        <div class="section-title" style="margin-bottom:16px">별점 분포</div>
+        <svg width="100%" height="200" viewBox="0 0 300 180" style="background:#fafafa;border-radius:8px">
+          <line x1="30" y1="10" x2="30" y2="150" stroke="#ddd" stroke-width="1"/>
+          <line x1="30" y1="150" x2="280" y2="150" stroke="#ddd" stroke-width="1"/>
+          <rect x="50" y="85" width="25" height="65" fill="#D62B45" rx="2"/>
+          <text x="62" y="160" font-size="11" fill="#666" text-anchor="middle">5별</text>
+          <text x="62" y="75" font-size="12" font-weight="600" fill="#333" text-anchor="middle">18</text>
+          <rect x="90" y="65" width="25" height="85" fill="#D62B45" opacity="0.8" rx="2"/>
+          <text x="102" y="160" font-size="11" fill="#666" text-anchor="middle">4별</text>
+          <text x="102" y="55" font-size="12" font-weight="600" fill="#333" text-anchor="middle">25</text>
+          <rect x="130" y="115" width="25" height="35" fill="#D62B45" opacity="0.6" rx="2"/>
+          <text x="142" y="160" font-size="11" fill="#666" text-anchor="middle">3별</text>
+          <text x="142" y="105" font-size="12" font-weight="600" fill="#333" text-anchor="middle">10</text>
+          <rect x="170" y="140" width="25" height="10" fill="#D62B45" opacity="0.4" rx="2"/>
+          <text x="182" y="160" font-size="11" fill="#666" text-anchor="middle">2별</text>
+          <text x="182" y="130" font-size="12" font-weight="600" fill="#333" text-anchor="middle">3</text>
+          <rect x="210" y="145" width="25" height="5" fill="#D62B45" opacity="0.3" rx="2"/>
+          <text x="222" y="160" font-size="11" fill="#666" text-anchor="middle">1별</text>
+          <text x="222" y="135" font-size="12" font-weight="600" fill="#333" text-anchor="middle">2</text>
+        </svg>
+        <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:16px;text-align:center">
+          <div><div style="font-size:16px;font-weight:700;color:#D62B45">4.6</div><div style="font-size:11px;color:#999">평균 별점</div></div>
+          <div><div style="font-size:16px;font-weight:700;color:#333">58</div><div style="font-size:11px;color:#999">총 리뷰</div></div>
+          <div><div style="font-size:16px;font-weight:700;color:#28a745">18</div><div style="font-size:11px;color:#999">5별</div></div>
+          <div><div style="font-size:16px;font-weight:700;color:#28a745">25</div><div style="font-size:11px;color:#999">4별</div></div>
+          <div><div style="font-size:16px;font-weight:700;color:#999">15</div><div style="font-size:11px;color:#999">나머지</div></div>
+        </div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-title" style="margin-bottom:12px">최근 리뷰</div>
+        <div style="display:grid;gap:12px">
+          <div style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:16px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+              <div>
+                <div style="font-size:13px;font-weight:600;color:#333">김**</div>
+                <div style="font-size:12px;color:#999;margin-top:4px">커피 데이트 경험</div>
+              </div>
+              <div style="display:flex;gap:2">
+                <span style="color:#ffc107">★</span><span style="color:#ffc107">★</span><span style="color:#ffc107">★</span><span style="color:#ffc107">★</span><span style="color:#ffc107">★</span>
+              </div>
+            </div>
+            <div style="font-size:13px;color:#333;margin-bottom:12px">정말 좋은 경험이었어요! 셀러분이 친절하고 전문가답게 설명해주셨습니다.</div>
+            <button style="background:#f5f5f5;color:#333;border:none;border-radius:6px;padding:8px 12px;font-size:12px;font-weight:600;cursor:pointer">답변 달기</button>
+          </div>
+          <div style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:16px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+              <div>
+                <div style="font-size:13px;font-weight:600;color:#333">이**</div>
+                <div style="font-size:12px;color:#999;margin-top:4px">메이크업 컨설팅 경험</div>
+              </div>
+              <div style="display:flex;gap:2">
+                <span style="color:#ffc107">★</span><span style="color:#ffc107">★</span><span style="color:#ffc107">★</span><span style="color:#ffc107">★</span><span style="color:#ddd">★</span>
+              </div>
+            </div>
+            <div style="font-size:13px;color:#333;margin-bottom:12px">기대 이상이었습니다. 다음에도 이용하고 싶습니다.</div>
+            <button style="background:#f5f5f5;color:#333;border:none;border-radius:6px;padding:8px 12px;font-size:12px;font-weight:600;cursor:pointer">답변 달기</button>
+          </div>
+          <div style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:16px">
+            <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:12px">
+              <div>
+                <div style="font-size:13px;font-weight:600;color:#333">박**</div>
+                <div style="font-size:12px;color:#999;margin-top:4px">스타일 상담 경험</div>
+              </div>
+              <div style="display:flex;gap:2">
+                <span style="color:#ffc107">★</span><span style="color:#ffc107">★</span><span style="color:#ffc107">★</span><span style="color:#ddd">★</span><span style="color:#ddd">★</span>
+              </div>
+            </div>
+            <div style="font-size:13px;color:#333;margin-bottom:12px">좋은 조언 감사합니다.</div>
+            <button style="background:#f5f5f5;color:#333;border:none;border-radius:6px;padding:8px 12px;font-size:12px;font-weight:600;cursor:pointer">답변 달기</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 5: SETTINGS -->
+    <div id="dash-tab-settings" class="dash-tab-content" style="display:none">
+      <div class="section-block" style="margin-bottom:24px">
+        <div class="section-title" style="margin-bottom:16px">프로필 편집</div>
+        <div style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:16px">
+          <div style="margin-bottom:16px">
+            <label style="font-size:12px;font-weight:600;color:#333;display:block;margin-bottom:6px">프로필 이름</label>
+            <input type="text" value="김셀러" style="width:100%;border:1px solid #e0e0e0;border-radius:6px;padding:10px;font-size:14px;box-sizing:border-box"/>
+          </div>
+          <div style="margin-bottom:16px">
+            <label style="font-size:12px;font-weight:600;color:#333;display:block;margin-bottom:6px">소개</label>
+            <textarea style="width:100%;border:1px solid #e0e0e0;border-radius:6px;padding:10px;font-size:14px;min-height:80px;box-sizing:border-box;font-family:inherit">스타일, 메이크업, 컨설팅 전문가입니다.</textarea>
+          </div>
+          <button style="background:#D62B45;color:white;border:none;border-radius:6px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer">저장</button>
+        </div>
+      </div>
+
+      <div class="section-block" style="margin-bottom:24px">
+        <div class="section-title" style="margin-bottom:12px">알림 설정</div>
+        <div style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:16px;display:grid;gap:12px">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid #f0f0f0">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#333">입찰 알림</div>
+              <div style="font-size:12px;color:#999">새로운 입찰이 들어올 때</div>
+            </div>
+            <input type="checkbox" checked style="width:18px;height:18px;cursor:pointer"/>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid #f0f0f0">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#333">정산 알림</div>
+              <div style="font-size:12px;color:#999">정산 예정일 3일 전</div>
+            </div>
+            <input type="checkbox" checked style="width:18px;height:18px;cursor:pointer"/>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:12px;border-bottom:1px solid #f0f0f0">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#333">리뷰 알림</div>
+              <div style="font-size:12px;color:#999">새로운 리뷰 등록 시</div>
+            </div>
+            <input type="checkbox" checked style="width:18px;height:18px;cursor:pointer"/>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div>
+              <div style="font-size:13px;font-weight:600;color:#333">마케팅 알림</div>
+              <div style="font-size:12px;color:#999">이벤트 및 프로모션</div>
+            </div>
+            <input type="checkbox" style="width:18px;height:18px;cursor:pointer"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-block" style="margin-bottom:24px">
+        <div class="section-title" style="margin-bottom:12px">셀러 등급 현황</div>
+        <div style="background:linear-gradient(135deg,#f0f0f0,#fafafa);border-radius:8px;padding:16px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+            <div>
+              <div style="font-size:12px;color:#999;margin-bottom:4px">현재 등급</div>
+              <div style="font-size:24px;font-weight:700;color:#D62B45">Silver</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:12px;color:#999;margin-bottom:4px">다음 업그레이드까지</div>
+              <div style="font-size:18px;font-weight:600;color:#333">2건 더</div>
+            </div>
+          </div>
+          <div style="background:white;border-radius:6px;padding:8px;margin-bottom:12px">
+            <div style="display:flex;gap:4;margin-bottom:8px">
+              <div style="flex:1;height:4px;background:#D62B45;border-radius:2px"></div>
+              <div style="flex:1;height:4px;background:#D62B45;border-radius:2px"></div>
+              <div style="flex:1;height:4px;background:#D62B45;border-radius:2px"></div>
+              <div style="flex:1;height:4px;background:#e0e0e0;border-radius:2px"></div>
+              <div style="flex:1;height:4px;background:#e0e0e0;border-radius:2px"></div>
+            </div>
+            <div style="font-size:11px;color:#999;text-align:center">60% 진행</div>
+          </div>
+          <div style="background:#fff8f8;border:1px solid #ffe0e0;border-radius:6px;padding:10px">
+            <div style="font-size:12px;color:#D62B45;font-weight:600">업그레이드 조건</div>
+            <ul style="font-size:11px;color:#666;margin:6px 0 0 0;padding-left:16px">
+              <li>완료된 경매 5건 이상</li>
+              <li>평균 별점 4.5 이상</li>
+              <li>재구매율 70% 이상</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-block">
+        <div class="section-title" style="margin-bottom:12px">정산 계좌 관리</div>
+        <div style="background:white;border:1px solid #e0e0e0;border-radius:8px;padding:16px">
+          <div style="margin-bottom:12px">
+            <label style="font-size:12px;font-weight:600;color:#333;display:block;margin-bottom:6px">은행 선택</label>
+            <select style="width:100%;border:1px solid #e0e0e0;border-radius:6px;padding:10px;font-size:14px;box-sizing:border-box">
+              <option>국민은행</option>
+              <option>신한은행</option>
+              <option>우리은행</option>
+              <option>하나은행</option>
+            </select>
+          </div>
+          <div style="margin-bottom:12px">
+            <label style="font-size:12px;font-weight:600;color:#333;display:block;margin-bottom:6px">계좌번호</label>
+            <input type="text" placeholder="계좌번호 입력" style="width:100%;border:1px solid #e0e0e0;border-radius:6px;padding:10px;font-size:14px;box-sizing:border-box"/>
+          </div>
+          <div style="margin-bottom:16px">
+            <label style="font-size:12px;font-weight:600;color:#333;display:block;margin-bottom:6px">예금주명</label>
+            <input type="text" placeholder="예금주명 입력" style="width:100%;border:1px solid #e0e0e0;border-radius:6px;padding:10px;font-size:14px;box-sizing:border-box"/>
+          </div>
+          <button style="background:#D62B45;color:white;border:none;border-radius:6px;padding:10px 16px;font-size:14px;font-weight:600;cursor:pointer">저장</button>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -4268,7 +4745,8 @@ function cardHTML(a,s){
 }
 
 // ── NAVIGATION ───────────────────────────────────────────
-function showPage(name){
+let _navSkipPush=false;
+function showPage(name,skipPush){
   const t=document.getElementById('page-'+name);
   if(!t){showToast('준비 중인 페이지입니다');return;}
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
@@ -4278,10 +4756,40 @@ function showPage(name){
   const si=document.querySelector(`.snav-item[data-page="${name}"]`);
   if(si)si.classList.add('active');
   window.scrollTo(0,0);
+  if(!skipPush&&!_navSkipPush){
+    history.pushState({page:name},'','#'+name);
+  }
   ({home:renderHome,explore:renderExplore,mypage:renderMypage,
     chat:renderChatList,notifications:renderNotifs,
     membership:renderMembership}[name]||Function)();
 }
+
+// ── SELLER DASHBOARD TAB SWITCHER ─────────────────────────
+function switchDashTab(tabName){
+  const tabs=['overview','auctions','settlement','reviews','settings'];
+  const tabNames=['개요','경매관리','정산','리뷰관리','설정'];
+
+  // Hide all tabs
+  tabs.forEach(t=>{
+    const el=document.getElementById('dash-tab-'+t);
+    if(el)el.style.display='none';
+  });
+
+  // Show selected tab
+  const sel=document.getElementById('dash-tab-'+tabName);
+  if(sel)sel.style.display='block';
+
+  // Update tab buttons
+  const buttons=document.querySelectorAll('.dash-tab');
+  buttons.forEach((btn,idx)=>{
+    const isActive=tabs[idx]===tabName;
+    btn.style.color=isActive?'#333':'#999';
+    btn.style.borderBottomColor=isActive?'#D62B45':'transparent';
+  });
+
+  window.scrollTo(0,0);
+}
+
 function setSideActive(el){
   document.querySelectorAll('.snav-item').forEach(i=>i.classList.remove('active'));
   if(el)el.classList.add('active');
@@ -4974,17 +5482,17 @@ function agentGreeting(id){
 
 function updateQuickReplies(agentId, chips){
   const defaults={
-    finder:['뷰티·메이크업','요가·피트니스','요리 클래스','음악 레슨','커리어 상담','인기 추천'],
+    finder:['뷰티·메이크업','요가·피트니스','요리 클래스','마감 임박 경매','인기 TOP 3','선물하고 싶어'],
     budget:['3만원 이하','3~5만원','5~10만원','10만원 이상','가성비 최고는?'],
     gift:['생일 선물','기념일 선물','취업 축하','졸업 선물','부모님 선물'],
     style:['데일리 메이크업','웨딩 뷰티','퍼스널 컬러','피부 관리','헤어스타일'],
     career:['이직 상담','SNS 마케팅','창업 준비','포트폴리오','면접 코칭'],
     seller:['수익은 얼마나?','등록 방법','수수료 안내','어떤 경험 팔 수 있나?','성공 팁']
   };
-  const list=chips||defaults[agentId]||defaults.finder;
-  const qk=q('ai-quick'); if(!qk)return;
-  qk.style.display='flex';
-  qk.innerHTML=list.map(c=>`<button onclick="aiSend('${c}')">${c}</button>`).join('');
+  const list = chips || defaults[agentId] || defaults.finder;
+  const qk = q('ai-quick'); if(!qk) return;
+  qk.style.display = 'flex';
+  qk.innerHTML = list.map(c=>`<button onclick="aiSend('${c.replace(/'/g,"\\'")}')">${c}</button>`).join('');
 }
 
 function toggleAI(){
@@ -4992,7 +5500,32 @@ function toggleAI(){
   const w=q('ai-widget'); if(!w)return;
   if(aiOpen){
     w.style.display='flex';
-    if(!aiMsgs.length)setTimeout(()=>{addAIMsg('them',agentGreeting(curAgent));updateQuickReplies(curAgent);},400);
+    if(!aiMsgs.length){
+      setTimeout(()=>{
+        // 현재 페이지 컨텍스트 기반 첫 인사
+        let greeting = agentGreeting(curAgent);
+        let contextChips = null;
+        if(curPage==='auction-detail'&&curAuctId){
+          const a=findA(curAuctId); const s=sellerOf(curAuctId);
+          if(a&&s){
+            greeting = `지금 보고 계신 <b>${a.title}</b>에 관심 있으신가요?<br>입찰부터 결제까지 도와드릴게요!`;
+            contextChips = ['지금 입찰하기','즉시 구매','이 셀러 다른 경험','비슷한 셀러 추천'];
+            aiLastRec = {s, a};
+          }
+        } else if(curPage==='seller-profile'&&curSellerId){
+          const s=findS(curSellerId);
+          if(s){ greeting = `<b>${s.name}</b> 셀러 프로필 보고 계시네요!<br>어떤 경험에 관심 있으신가요?`; contextChips = [s.auctions[0]?.title||'첫 번째 경험','두 번째 경험','리뷰 보기','지금 구매']; }
+        } else if(curPage==='explore'){
+          greeting = `탐색 중이시군요! 원하는 경험을 빠르게 찾아드릴게요.`;
+          contextChips = ['인기 TOP 3','3만원 이하','즉시구매 가능','오늘 마감'];
+        } else if(curPage==='mypage'){
+          greeting = `마이페이지에 오셨군요! 진행중인 경험이나 결제 내역이 궁금하신가요?`;
+          contextChips = ['진행중 경험 보기','결제 내역','위시리스트','크레딧 충전'];
+        }
+        addAIMsg('them', greeting);
+        updateQuickReplies(curAgent, contextChips);
+      }, 400);
+    }
   } else w.style.display='none';
 }
 
@@ -5025,33 +5558,164 @@ function aiSend(preset){
   setTimeout(()=>{hideTyping();const r=aiReply(msg);addAIMsg('them',r);},delay);
 }
 
-function sellerCard(s,a){
-  if(!s||!a)return'';
-  const price=a.type==='auction'?fmt(a.cur)+'원~':fmt(a.price)+'원';
-  const badge=a.type==='auction'
-    ?`<span style="font-size:10px;background:#fff3f5;color:#D62B45;border-radius:6px;padding:2px 6px;font-weight:700">경매중</span>`
-    :`<span style="font-size:10px;background:#f0fff4;color:#00B852;border-radius:6px;padding:2px 6px;font-weight:700">즉시구매</span>`;
-  return`<div onclick="openDetail(${a.id});toggleAI()" style="background:#f7f7f7;border-radius:12px;padding:11px 12px;margin-top:8px;cursor:pointer;border:1px solid #ebebeb;transition:all .2s" onmouseover="this.style.borderColor='#D62B45'" onmouseout="this.style.borderColor='#ebebeb'">
+// ── TRANSACTION ENGINE ───────────────────────────────────
+// 마지막으로 추천된 seller/auction 추적 (구매 의도 감지용)
+let aiLastRec = null;
+
+function sellerCard(s, a, opts){
+  if(!s||!a) return '';
+  opts = opts||{};
+  const price = a.type==='auction' ? fmt(a.cur)+'원~' : fmt(a.price)+'원';
+  const badge = a.type==='auction'
+    ? `<span style="font-size:10px;background:#fff3f5;color:#D62B45;border-radius:6px;padding:2px 6px;font-weight:700">경매중</span>`
+    : `<span style="font-size:10px;background:#f0fff4;color:#00B852;border-radius:6px;padding:2px 6px;font-weight:700">즉시구매</span>`;
+
+  // 뷰어 긴박감 표시
+  const urgLabel = a.left>0&&a.left<1800
+    ? `<span style="font-size:10px;color:#D62B45;font-weight:700;display:block;margin-top:4px">⚡ 마감 ${fmtSec(a.left)} · ${a.viewers}명 보는 중</span>`
+    : a.viewers>20
+    ? `<span style="font-size:10px;color:#888;display:block;margin-top:4px">${a.viewers}명이 보고 있어요</span>`
+    : '';
+
+  // 액션 버튼
+  const bidBtn = a.type==='auction'
+    ? `<button onclick="event.stopPropagation();aiStartPurchase(${a.id},'auction')" style="flex:1;padding:7px 0;background:#D62B45;color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">지금 입찰하기</button>`
+    : `<button onclick="event.stopPropagation();aiStartPurchase(${a.id},'buynow')" style="flex:1;padding:7px 0;background:#D62B45;color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer">즉시 구매하기</button>`;
+  const detailBtn = `<button onclick="event.stopPropagation();openDetail(${a.id});toggleAI()" style="flex:1;padding:7px 0;background:white;color:#333;border:1px solid #e0e0e0;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer">상세 보기</button>`;
+
+  // 마지막 추천 기록
+  aiLastRec = {s, a};
+
+  return `<div style="background:#f7f7f7;border-radius:12px;padding:12px;margin-top:8px;border:1px solid #ebebeb">
     <div style="display:flex;align-items:center;gap:8px;margin-bottom:7px">
       <div style="width:30px;height:30px;border-radius:50%;background:#e0e0e0;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#555;flex-shrink:0">${s.init}</div>
-      <div style="flex:1;min-width:0"><div style="font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.name}</div><div style="font-size:11px;color:#aaa">${s.cat}</div></div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:12px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${s.name} ${s.verified?'<span style="color:#2979FF;font-size:10px">✓</span>':''}</div>
+        <div style="font-size:11px;color:#aaa">${s.cat}</div>
+      </div>
       ${badge}
     </div>
-    <div style="font-size:12px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${a.title}</div>
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-top:5px">
-      <span style="font-size:13px;color:#D62B45;font-weight:700">${price}</span>
-      <span style="font-size:11px;color:#aaa">⭐ ${s.rating} · ${s.reviews}리뷰</span>
+    <div style="font-size:12px;font-weight:600;margin-bottom:4px;line-height:1.4">${a.title}</div>
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <span style="font-size:14px;color:#D62B45;font-weight:700">${price}</span>
+      <span style="font-size:11px;color:#aaa">⭐ ${s.rating} (${s.reviews})</span>
     </div>
+    ${urgLabel}
+    <div style="display:flex;gap:6px;margin-top:10px">${bidBtn}${detailBtn}</div>
   </div>`;
+}
+
+// AI에서 직접 결제 플로우 트리거
+function aiStartPurchase(auctionId, type){
+  toggleAI();
+  openDetail(auctionId);
+  // 약간의 딜레이 후 결제 액션 유도
+  setTimeout(()=>{
+    if(type==='buynow'){
+      openBuyNow(auctionId);
+    } else {
+      // 경매 상세 페이지로 이동 후 입찰창 포커스
+      const bidInput = document.querySelector('#detail-bid-input, .bid-input-field, input[placeholder*="입찰"]');
+      if(bidInput){ bidInput.focus(); bidInput.scrollIntoView({behavior:'smooth',block:'center'}); }
+    }
+    showToast(type==='buynow' ? '즉시 구매 페이지로 이동했어요!' : '입찰 금액을 입력하세요!');
+  }, 400);
 }
 
 // ── AGENT REPLY ROUTER ───────────────────────────────────
 function aiReply(msg){
-  const m=msg.toLowerCase();
+  const m = msg.toLowerCase();
   aiCtx.msgCount++;
-  // Budget detection
-  const bm=m.match(/(\d+)만원/); if(bm)aiCtx.budget=parseInt(bm[1])*10000;
-  // Route to agent
+
+  // ① 예산 파싱
+  const bm = m.match(/(\d+)만원/); if(bm) aiCtx.budget = parseInt(bm[1])*10000;
+
+  // ② 구매 의도 감지 (최우선)
+  const buyIntent = /살게|구매할게|입찰할게|지금 살|결제할게|살래|사고 싶|바로 살|지금 할게|구매 원해|이거 살|이걸로 할게/.test(m);
+  if(buyIntent){
+    if(aiLastRec){
+      const {s, a} = aiLastRec;
+      const type = a.type==='auction' ? 'auction' : 'buynow';
+      updateQuickReplies(curAgent, ['결제 방법 알려줘','에스크로 설명','멤버십 혜택','다른 셀러 보기']);
+      return `<b>✦ 바로 진행해드릴게요!</b><br>
+<div class="ai-info-box green" style="margin:6px 0;font-size:12px">
+${type==='auction'
+  ? `⚡ 현재 <b>${fmt(a.cur)}원</b>에 입찰 중 · ${a.viewers}명 경쟁 중<br>지금 입찰하지 않으면 놓칠 수 있어요!`
+  : `✅ <b>${fmt(a.price)}원</b>에 즉시 구매 가능<br>에스크로로 100% 안전하게 결제돼요`}
+</div>
+${sellerCard(s, a)}`;
+    }
+    return `마음에 드는 경험을 먼저 골라주세요!<br><button class="ai-action-btn" onclick="aiSend('인기 셀러 추천')">인기 셀러 보기 →</button>`;
+  }
+
+  // ③ 긴박감 / 재고 문의
+  const urgencyIntent = /빨리|급해|지금 당장|몇 자리|마감|남은 자리|경쟁/.test(m);
+  if(urgencyIntent){
+    const urgAucts = allAuctions().filter(a=>a.type==='auction'&&a.left>0&&a.left<3600).slice(0,2);
+    if(urgAucts.length){
+      const cards = urgAucts.map(a=>{const s=sellerOf(a.id);return s?sellerCard(s,a):'';}).join('');
+      updateQuickReplies(curAgent,['지금 입찰하기','즉시 구매로 확정','다른 경험 보기']);
+      return `<b>⚡ 마감 임박 경험</b><br>지금 바로 입찰하지 않으면 놓칠 수 있어요!<br>${cards}`;
+    }
+    return `현재 마감 임박 경매는 없지만, 경쟁이 활발한 경험이 있어요!<br><button class="ai-action-btn" onclick="showPage('explore');toggleAI()">실시간 경매 보기 →</button>`;
+  }
+
+  // ④ 비교 / 고민 중
+  const compareIntent = /비교|어떤 게 나아|뭐가 좋아|고민|모르겠|추천해줘|골라줘/.test(m);
+  if(compareIntent && aiLastRec){
+    const alts = sellers.filter(s=>s.id!==aiLastRec.s.id).slice(0,2);
+    updateQuickReplies(curAgent,['이걸로 할게','다른 카테고리','가격 비교']);
+    return `<b>✦ 비교 추천</b><br>이런 셀러들도 있어요! 취향에 맞는 걸 골라보세요.<br>${alts.map(s=>sellerCard(s,s.auctions[0])).join('')}`;
+  }
+
+  // ⑤ 결제/보안 관련
+  if(/결제|카드|계좌|안전한지|페이/.test(m)){
+    return `<b>✦ 결제 방법</b><br>
+<div class="ai-info-box blue">
+💳 카드 결제 (국내 모든 카드)<br>
+🏦 계좌이체 · 가상계좌<br>
+₮ TimeBid 크레딧 (충전식)<br>
+📱 카카오페이 · 네이버페이
+</div>
+<div class="ai-info-box green" style="margin-top:6px;font-size:12px">
+🔒 에스크로 보호: 경험 완료 전까지<br>TimeBid가 결제금을 안전하게 보관해요
+</div>
+<button class="ai-action-btn ghost" onclick="openModal('charge')">크레딧 충전하기</button>`;
+  }
+
+  // ⑥ 경험 후기 / 평점 요청
+  if(/후기|리뷰|평점|별점|어때|좋아|나빠/.test(m) && aiLastRec){
+    const s = aiLastRec.s;
+    return `<b>✦ ${s.name} 셀러 리뷰</b><br>
+<div class="ai-info-box" style="font-size:13px">
+⭐ 평점: <b>${s.rating}/5.0</b> (${s.reviews}개 리뷰)<br>
+💬 "정말 만족스러운 경험이었어요!" · 박○○<br>
+💬 "전문적이고 친절해요. 재구매 의향 있어요" · 이○○<br>
+💬 "가격 대비 퀄리티 최고입니다" · 최○○
+</div>
+${sellerCard(s, s.auctions[0])}`;
+  }
+
+  // ⑦ 일정 / 스케줄 문의
+  if(/언제|일정|예약|날짜|스케줄|시간 있어|가능해/.test(m)){
+    updateQuickReplies(curAgent,['이번 주 가능','다음 주','평일만','주말만','저녁 시간']);
+    return `<b>✦ 일정 예약 안내</b><br>
+<div class="ai-info-box">
+📅 낙찰/구매 완료 후 셀러와 채팅으로 일정 조율<br>
+⏰ 셀러 응답 평균 <b>47분</b> 이내<br>
+📆 보통 구매 후 <b>3~7일 이내</b> 진행 가능<br>
+🔄 일정 변경은 경험 2일 전까지 가능
+</div>
+${aiLastRec ? sellerCard(aiLastRec.s, aiLastRec.a) : ''}`;
+  }
+
+  // ⑧ 대화 맥락 기반 크로스셀
+  if(aiCtx.msgCount>=3 && aiLastRec && /다른|더|또|추가/.test(m)){
+    const others = sellers.filter(s=>s.cat!==aiLastRec.s.cat).slice(0,2);
+    return `<b>✦ 이런 경험도 어때요?</b><br>방금 보신 것과 다른 카테고리 추천이에요!<br>${others.map(s=>sellerCard(s,s.auctions[0])).join('')}`;
+  }
+
+  // ⑨ 에이전트별 라우팅
   if(curAgent==='budget') return budgetReply(m);
   if(curAgent==='gift')   return giftReply(m);
   if(curAgent==='style')  return styleReply(m);
@@ -5320,9 +5984,19 @@ document.addEventListener('click',e=>{
   }
 });
 
+// ── HISTORY ──────────────────────────────────────────────
+window.addEventListener('popstate',function(e){
+  const pg=(e.state&&e.state.page)||location.hash.replace('#','')||'home';
+  _navSkipPush=true;
+  showPage(pg,true);
+  _navSkipPush=false;
+});
+
 // ── INIT ─────────────────────────────────────────────────
 window.addEventListener('DOMContentLoaded',()=>{
-  showPage('home');
+  const initPage=location.hash.replace('#','')||'home';
+  history.replaceState({page:initPage},'','#'+initPage);
+  showPage(initPage,true);
   startSims();
   updateBadges();
   updateCreditDisplay();
